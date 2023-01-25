@@ -2,9 +2,8 @@ from django.urls import path, include
 from rest_framework import routers
 from .views import *
 
-router = routers.DefaultRouter()
-router.register(r'api/texts', TextViewSet)
+text_detail = TextViewSet.as_view({"post": "make_wav"})
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('texts/<str:email>/make_wav', text_detail),
 ]
