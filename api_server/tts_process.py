@@ -31,7 +31,8 @@ def add_synth(email):
 def make_tts(email, uuid, text):
     wav_path = f'./api_server/wav/{email}_{uuid}.wav'
     syn = synth_dict.get(email)
-    text = normalize_text(text)
+    symbol = syn.tts_config.characters.characters
+    text = normalize_text(text, symbol)
     wav = syn.tts(text, None, None)
     syn.save_wav(wav, wav_path)
     # TODO: 만든 wav파일을 bucket에 업로드해야 함
