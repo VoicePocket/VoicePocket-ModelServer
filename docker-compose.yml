@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  voicepocket_apiserver:
+    build:
+      context: ./api_server
+      args:
+        DJANGO_ALLOWED_HOSTS: "*"
+        DJANGO_SECRET_KEY: "*"
+    command: sh -c "/wait && python ./api_server/manage.py makemigrations && python ./api_server/manage.py migrate && python ./api_server/manage.py runserver 0.0.0.0:8000"
+    container_name: voicepocket_apiserver
+    restart: on-failure
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/voice_pocket
+    networks:
+      - voicePocket
+    depends_on:
+      - voicepocket_mysql
+
+  voicepocket_mysql:
+    image: mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    container_name: voicepocket_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./config/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment: #
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=voice_pocket
+      - MYSQL_USER=voice_docker
+      - MYSQL_PASSWORD=voice!
+      - TZ=Asia/Seoul
+    networks:
+      - voicePocket
+
+  rabbit:
+      hostname: voice_pocket_host #
+      image: rabbitmq:3-management
+      command: rabbitmq-server
+      restart: unless-stopped
+      environment: #
+        - RABBITMQ_DEFAULT_USER=pocket
+        - RABBITMQ_DEFAULT_PASS=pocket!
+        - RABBITMQ_DEFAULT_VHOST=voice_pocket_host
+      ports:
+        - 5672:5672
+        - 15672:15672
+      volumes:
+      - ./:/var/lib/rabbitmq
+      networks:
+        - voicePocket
+      depends_on:
+        - voicepocket_apiserver
+
+  celery:
+    build: 
+      context: ./api_server
+    restart: unless-stopped
+    depends_on:
+      - "voicepocket_apiserver"
+      - "voicepocket_mysql"
+      - "rabbit"
+    networks:
+      - voicePocket
+    command: ["celery", "-A", "api_server.worker.celery_app", "worker", "--loglevel=info"]
+    volumes:
+      - ./:/voice_pocket
+
+networks:
+  voicePocket:
+    driver: bridge
