@@ -1,3 +1,6 @@
+.erlang.cookie
+mnesia/
+voicepocket-bucketKey.json
 migrations/
 api_server/wav/*
 api_server/voice_model/*
