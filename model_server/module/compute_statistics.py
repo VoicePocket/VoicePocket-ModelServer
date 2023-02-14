@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, glob
 sys.path.append(f"{os.path.abspath(os.pardir)}TTS/")
 import numpy as np
 from tqdm import tqdm
@@ -11,7 +11,7 @@ from TTS.tts.configs.shared_configs import BaseAudioConfig, CharactersConfig, Ba
 def make_compute_statistics(data_path:str, out_path:str, model_name:str):
     dataset_config = BaseDatasetConfig(formatter="ljspeech", meta_file_train="metadata.csv", path=data_path)
     audioConfig = BaseAudioConfig(preemphasis=0.98, do_trim_silence= False, trim_db=60, power=1.1, mel_fmax=8000.0)
-    if model_name == "Glow_TTS":
+    if model_name == "Glow-TTS":
         CONFIG = GlowTTSConfig(
             save_checkpoints=False,
             batch_size=64,
@@ -46,7 +46,7 @@ def make_compute_statistics(data_path:str, out_path:str, model_name:str):
             test_sentences=["모델 학습을 위해 사용하지 않은 문장들입니다."],
             audio=audioConfig
         )
-    elif model_name =="HiFi_GAN":
+    elif model_name =="HiFi-GAN":
         CONFIG = HifiganConfig(
             save_checkpoints=False,
             batch_size=32,
@@ -76,7 +76,10 @@ def make_compute_statistics(data_path:str, out_path:str, model_name:str):
         return None
     
     ap = AudioProcessor.init_from_config(CONFIG)
-    dataset_items = load_tts_samples(CONFIG.datasets)[0]
+    if model_name == "Glow-TTS":
+        dataset_items = load_tts_samples(CONFIG.datasets)[0]
+    else:
+        dataset_items = glob.glob(os.path.join(CONFIG.data_path, "**", "*.wav"), recursive=True)
     
     mel_sum = 0
     mel_square_sum = 0
