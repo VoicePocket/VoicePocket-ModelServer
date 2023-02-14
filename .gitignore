@@ -5,7 +5,7 @@ migrations/
 api_server/wav/*
 api_server/voice_model/*
 api_server/config/my_settings.py
-module/
+#module/
 .empty
 .vscode
 
