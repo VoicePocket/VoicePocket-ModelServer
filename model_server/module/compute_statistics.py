@@ -1,5 +1,5 @@
 import os, sys, glob
-sys.path.append(f"{os.path.abspath(os.pardir)}TTS/")
+sys.path.append(f"{os.path.dirname(os.path.abspath(os.path.dirname(__file__)))}/TTS/")
 import numpy as np
 from tqdm import tqdm
 from TTS.tts.datasets import load_tts_samples

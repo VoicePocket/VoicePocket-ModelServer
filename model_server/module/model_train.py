@@ -1,5 +1,5 @@
 import os, sys
-sys.path.append(f"{os.path.abspath(os.pardir)}TTS/")
+sys.path.append(f"{os.path.dirname(os.path.abspath(os.path.dirname(__file__)))}/TTS/")
 from trainer import Trainer, TrainerArgs
 from TTS.tts.configs.glow_tts_config import GlowTTSConfig
 from TTS.tts.configs.shared_configs import BaseDatasetConfig, CharactersConfig, BaseAudioConfig
