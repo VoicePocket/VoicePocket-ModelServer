@@ -3,7 +3,7 @@ sys.path.append(f"{os.path.abspath(os.pardir)}TTS/")
 from trainer import Trainer, TrainerArgs
 from TTS.tts.configs.glow_tts_config import GlowTTSConfig
 from TTS.tts.configs.shared_configs import BaseDatasetConfig, CharactersConfig, BaseAudioConfig
-from TTS.vocoder.configs import HifiganConfig
+from TTS.vocoder.configs.hifigan_config import HifiganConfig
 from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.glow_tts import GlowTTS
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
