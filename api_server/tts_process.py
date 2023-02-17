@@ -1,4 +1,4 @@
-import os, sys, tarfile
+import os, sys, tarfile, pickle
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 from module.TTS.TTS.utils.synthesizer import Synthesizer
@@ -32,7 +32,10 @@ def add_synth(email):
     )
 
     synth_dict[email] = synthesizer
-
+    
+    with open("./api_server/synthesizer.pickle","wb") as fw:
+        pickle.dump(synth_dict, fw)
+    
     # os.remove(voice_model_path)
 
 def make_tts(email, uuid, text):
@@ -47,4 +50,7 @@ def make_tts(email, uuid, text):
     
     os.remove(wav_path)
 
-synth_dict = {} # syntesizer 객체를 모아두는 딕셔너리
+synth_dict = {}
+
+with open("./api_server/synthesizer.pickle","rb") as fr:
+    synth_dict = pickle.load(fr)
