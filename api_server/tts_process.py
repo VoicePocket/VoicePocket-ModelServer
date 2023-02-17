@@ -24,6 +24,7 @@ def add_synth(email):
         "./api_server/voice_model/glowtts/5g_checkpoint.pth.tar",
         "./api_server/voice_model/glowtts/5g_config.json",
         None,
+        None,
         "./api_server/voice_model/hifigan/5h_checkpoint.pth.tar",
         "./api_server/voice_model/hifigan/5h_config.json",
         None,
