@@ -1,7 +1,7 @@
 import os, sys, tarfile, pickle
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-from module.TTS.TTS.utils.synthesizer import Synthesizer
+from TTS.utils.synthesizer import Synthesizer
 from text_process import normalize_text
 from bucket_process import down_model_from_bucket, upload_wav_to_bucket
 
@@ -21,14 +21,10 @@ def add_synth(email):
     #     best_model_tar.extractall(f"./api_server/voice_model")
 
     synthesizer = Synthesizer(
-        "./api_server/voice_model/glowtts/5g_checkpoint.pth.tar",
-        "./api_server/voice_model/glowtts/5g_config.json",
-        None,
-        "./api_server/voice_model/hifigan/5h_checkpoint.pth.tar",
-        "./api_server/voice_model/hifigan/5h_config.json",
-        None,
-        None,
-        False,
+        tts_checkpoint="./api_server/voice_model_new/Glow_TTS_best_model.pth",
+        tts_config_path="./api_server/voice_model_new/Glow_TTS_config.json",
+        vocoder_checkpoint="./api_server/voice_model_new/HiFi_GAN_best_model.pth",
+        vocoder_config="./api_server/voice_model_new/HiFi_GAN_config.json"
     )
 
     synth_dict[email] = synthesizer

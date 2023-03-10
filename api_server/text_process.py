@@ -4,7 +4,9 @@ from unicodedata import normalize
 import os, sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-from module.g2pK.g2pk import g2pk, english, utils, numerals
+import g2pk
+
+#from g2pk import g2pk, english, utils, numerals
 
 def normalize_text(text, symbols):
     text = text.strip()
@@ -17,9 +19,9 @@ def normalize_text(text, symbols):
     text = jamo_text(text)
 
     text = g2p.idioms(text)
-    text = english.convert_eng(text, g2p.cmu)
-    text = utils.annotate(text, g2p.mecab)
-    text = numerals.convert_num(text)
+    text = g2pk.english.convert_eng(text, g2p.cmu)
+    text = g2pk.utils.annotate(text, g2p.mecab)
+    text = g2pk.numerals.convert_num(text)
     text = re.sub("/[PJEB]", "", text)
 
     text = alphabet_text(text)
