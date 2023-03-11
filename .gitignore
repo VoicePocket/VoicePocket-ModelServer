@@ -4,9 +4,8 @@ mnesia/
 voicepocket-bucketKey.json
 migrations/
 api_server/wav/*
-api_server/voice_model/*
+api_server/voice_model_new/*
 api_server/config/my_settings.py
-#module/
 .empty
 .vscode
 
