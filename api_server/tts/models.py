@@ -9,3 +9,6 @@ class Text(models.Model):
     wav_url = models.CharField(max_length=100, null = False, default='')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'Text'

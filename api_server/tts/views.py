@@ -22,7 +22,7 @@ class TextViewSet(viewsets.ModelViewSet):
         text = request.data.get("text")
 
         wav_worker = wav_process.delay(uuid, email, text)
-        while (not wav_worker.ready()):
+        while (not wav_worker.ready()): # TODO: 이 부분 비동기식으로 바꾸기
             time.sleep(1)
         request.data["wav_url"] = wav_worker.result
 

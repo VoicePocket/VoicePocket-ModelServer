@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 from .my_settings import MY_SECRET, MY_DATABASES    #
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,7 @@ SECRET_KEY = MY_SECRET['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']   # 배포할 땐 허용 가능 호스트를 설정해줄 것!
+ALLOWED_HOSTS = ['*']   # TODO: 배포할 땐 허용 가능 호스트를 설정해줄 것!
 
 
 # Application definition
@@ -38,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainApp.apps.MainappConfig',
+    'django.contrib.sites',
+    # installed apps
+    'tts.apps.TtsConfig',
+    'accounts.apps.AccountsConfig',
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +102,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'TOKEN_USER_CLASS': 'user.User', # 자신의 User 모델 연결
+}
+
+REST_USE_JWT = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ( 
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': ( # API에 접근할 때 헤더에 access_token을 포함한, 유효한 유저만이 접근할 수 있도록 default로 설정해주는 부분
+    #     'rest_framework.permissions.IsAuthenticated',   # 인증된 사용자만 접근
+    # )
+}
+
+AUTH_USER_MODEL = 'accounts.User'   # Custum User Model
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
