@@ -12,6 +12,7 @@ from .english.abbreviations import abbreviations_en
 from .english.number_norm import normalize_numbers as en_normalize_numbers
 from .english.time_norm import expand_time_english
 from .french.abbreviations import abbreviations_fr
+from .korean.phonemizer import korean_text_to_phonemes
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r"\s+")
@@ -37,6 +38,10 @@ def collapse_whitespace(text):
 
 def convert_to_ascii(text):
     return anyascii(text)
+
+
+def nfd(text):
+    return normalize('NFD', text)
 
 
 def remove_aux_symbols(text):
@@ -159,21 +164,28 @@ def chinese_mandarin_cleaners(text: str) -> str:
     return text
 
 
-def multilingual_cleaners(text):
-    """Pipeline for multilingual text"""
-    text = lowercase(text)
-    text = replace_symbols(text, lang=None)
-    text = remove_aux_symbols(text)
-    text = collapse_whitespace(text)
-    return text
-
-def nfd(text):
-    return normalize('NFD', text)
-
 def korean_cleaners(text):
     text = lowercase(text)
     text = replace_symbols(text, lang="kr")
     text = remove_aux_symbols(text)
     text = collapse_whitespace(text)
     text = nfd(text)
+    return text
+
+
+def korean_g2p_cleaners(text):
+    text = lowercase(text)
+    text = replace_symbols(text, lang="kr")
+    text = remove_aux_symbols(text)
+    text = collapse_whitespace(text)
+    text = korean_text_to_phonemes(text)
+    return text
+
+
+def multilingual_cleaners(text):
+    """Pipeline for multilingual text"""
+    text = lowercase(text)
+    text = replace_symbols(text, lang=None)
+    text = remove_aux_symbols(text)
+    text = collapse_whitespace(text)
     return text
