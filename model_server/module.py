@@ -1,5 +1,5 @@
 import os, sys
-sys.path.append(f"{os.path.dirname(os.path.abspath(os.path.dirname(__file__)))}/TTS/")
+sys.path.append(f"{os.path.dirname(os.path.abspath(os.path.dirname(__file__)))}/")
 from trainer import Trainer, TrainerArgs
 from TTS.tts.configs.shared_configs import BaseDatasetConfig, CharactersConfig
 from TTS.tts.configs.vits_config import VitsConfig
