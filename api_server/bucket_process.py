@@ -13,6 +13,18 @@ source_file_name = GCP에 업로드할 파일 절대경로
 destination_blob_name = 업로드할 파일을 GCP에 저장할 때의 이름
 """
 
+def down_audio_from_bucket(params, output_path):
+    data_path = f"{output_path}{params['uuid']}"
+    storage_client = storage.Client()
+    bucket_name = 'voice_pocket'
+    source_blob_name = f'{params["email"]}_audio.zip'
+    if not os.path.isdir(data_path):
+        os.mkdir(output_path)
+    destination_file_name = f'{output_path}/{source_blob_name}'
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(source_blob_name)
+    blob.download_to_filename(destination_file_name)
+    return data_path
 
 def down_model_from_bucket(email):
     storage_client = storage.Client()

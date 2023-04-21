@@ -1,5 +1,6 @@
 from flask import Flask, request
-from module import *
+from module import train_vits
+from ..api_server.bucket_process import down_audio_from_bucket
 from trainer import Trainer
 from requests import post
 import json

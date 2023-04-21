@@ -1,6 +1,5 @@
 import os, sys
 sys.path.append(f"{os.path.dirname(os.path.abspath(os.path.dirname(__file__)))}/")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./voicepocket-bucketKey.json"
 from trainer import Trainer, TrainerArgs
 from TTS.tts.configs.shared_configs import BaseDatasetConfig, CharactersConfig
 from TTS.tts.configs.vits_config import VitsConfig
@@ -8,20 +7,7 @@ from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.vits import Vits, VitsAudioConfig
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
-from google.cloud import storage
 
-def down_audio_from_bucket(params, output_path):
-    data_path = f"{output_path}{params['uuid']}"
-    storage_client = storage.Client()
-    bucket_name = 'voice_pocket'
-    source_blob_name = f'{params["email"]}_audio.zip'
-    if not os.path.isdir(data_path):
-        os.mkdir(output_path)
-    destination_file_name = f'{output_path}/{source_blob_name}'
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(source_blob_name)
-    blob.download_to_filename(destination_file_name)
-    return data_path
 
 def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -> Trainer:
     dataset_config = BaseDatasetConfig(formatter="sleeping_ce", meta_file_train="metadata.csv", path=data_path)
