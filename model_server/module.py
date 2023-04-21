@@ -8,6 +8,7 @@ from TTS.tts.models.vits import Vits, VitsAudioConfig
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
+
 def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -> Trainer:
     dataset_config = BaseDatasetConfig(formatter="sleeping_ce", meta_file_train="metadata.csv", path=data_path)
     
