@@ -1,5 +1,5 @@
 from flask import Flask, request
-from module import train_vits
+from module import train_vits, unzip_audioFile
 from ..api_server.bucket_process import down_audio_from_bucket
 from trainer import Trainer
 from requests import post
@@ -26,6 +26,8 @@ def train_model():
     params = json.loads(request.get_data(), encoding='utf-8')
     # Download from google Cloud Storage
     audio_path = down_audio_from_bucket(params, DATA_PATH)
+    # Unzip Audio File
+    audio_path = unzip_audioFile(audio_path)
     # Build Trainer for learning Model
     trainer, output_path = initialize_trainer(params["email"], params["uuid"], OUTPUT_PATH, audio_path)
     # Ready response
@@ -34,3 +36,4 @@ def train_model():
         del trainer, output_path
         return None
     trainer.fit()
+    response = post(f"ENTER THE RESPONSE ADDRESS", data=json.dumps({"uuid": params["uuid"], "output_path": output_path, "status":"Done!"}))

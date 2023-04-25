@@ -7,7 +7,14 @@ from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.vits import Vits, VitsAudioConfig
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
+from pathlib import Path
+from zipfile import ZipFile
 
+def unzip_audioFile(path:str):
+    path:Path = Path(path)
+    with ZipFile(path, 'r') as zip_ref:
+        zip_ref.extractall(path.parent)
+    return str(path.parent)
 
 def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -> Trainer:
     dataset_config = BaseDatasetConfig(formatter="sleeping_ce", meta_file_train="metadata.csv", path=data_path)
