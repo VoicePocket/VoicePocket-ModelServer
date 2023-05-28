@@ -2,7 +2,7 @@ import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="api_server/voicepocket-bucketKey.json"
 
 from google.cloud import storage
-
+from pathlib import Path
 """
 bucket_name: 서비스 계정 생성한 bucket 이름 입력
 
@@ -14,7 +14,7 @@ destination_blob_name = 업로드할 파일을 GCP에 저장할 때의 이름
 """
 
 def down_audio_from_bucket(params:dict, output_path:str):
-    data_path = f"{output_path}{params['uuid']}"
+    data_path = f"{Path(output_path).absolute().__str__}/{params['uuid']}"
     storage_client = storage.Client()
     bucket_name = 'voicepocket'
     source_blob_name = f'{params["email"]}.zip'
