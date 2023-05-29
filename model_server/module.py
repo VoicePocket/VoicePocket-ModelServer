@@ -7,14 +7,27 @@ from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.vits import Vits, VitsAudioConfig
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
+from TTS.bin.resample import resample_files
 from pathlib import Path
 from zipfile import ZipFile
+import shutil
 
+def build_dataset(file_path:str):
+    data_path = Path(file_path).absolute().parent.__str__()
+    # Build Dataset
+    os.mkdir(f"{data_path}/wavs")
+    shutil.move(file_path, f"{data_path}/wavs/temp.zip")
+    unzip_audioFile(f"{data_path}/wavs/temp.zip")
+    for file in os.listdir(f"./resources/"):
+        shutil.copy(f"./resources/{file}", f"{data_path}/{file}")
+    # Resample (NEED!)
+    resample_files(data_path, 22050)    
+    return data_path
+    
 def unzip_audioFile(path:str):
     path:Path = Path(path)
     with ZipFile(path, 'r') as zip_ref:
         zip_ref.extractall(path.parent)
-    return str(path.parent)
 
 def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -> Trainer:
     dataset_config = BaseDatasetConfig(formatter="sleeping_ce", meta_file_train="metadata.csv", path=data_path)
