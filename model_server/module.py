@@ -45,7 +45,8 @@ def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -
         run_name=run_name,
         project_name=project_name,
         run_description=f"{run_name} User's {project_name} TTS",
-        save_checkpoints=False,
+        save_checkpoints=True,
+        save_n_checkpoints=1,
         batch_size=16,
         eval_batch_size=32,
         batch_group_size=5,
@@ -119,7 +120,7 @@ def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -
     )
     model = Vits(config, ap, tokenizer, speaker_manager=None)
     trainer = Trainer(
-        TrainerArgs(),
+        TrainerArgs(restore_path="./resources/master_model.pth"),
         config,
         output_path,
         model=model,
