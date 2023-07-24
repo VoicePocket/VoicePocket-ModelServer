@@ -11,6 +11,7 @@ from TTS.bin.resample import resample_files
 from pathlib import Path
 from zipfile import ZipFile
 import shutil
+from ..api_server.bucket_process import upload_model_to_bucket
 
 def build_dataset(file_path:str):
     data_path = Path(file_path).absolute().parent.__str__()
@@ -129,3 +130,12 @@ def train_vits(run_name:str, project_name:str, output_path:str, data_path:str) -
         eval_samples=eval_samples,
     )
     return trainer
+
+def upload_model_file(output_path:str, params:dict):
+    model_path = ""
+    for path in os.listdir(output_path):
+        if "checkpoint" in path:
+            model_path = path
+    if model_path == "":
+        raise FileNotFoundError("There is no model File in output_path")
+    upload_model_to_bucket(f"{output_path}/{model_path}", params.get("email"))

@@ -1,5 +1,5 @@
 from flask import Flask, request
-from module import train_vits, build_dataset
+from module import train_vits, build_dataset, upload_model_file
 from ..api_server.bucket_process import down_audio_from_bucket
 from trainer import Trainer
 from requests import post
@@ -37,3 +37,4 @@ def train_model():
         return None
     trainer.fit()
     response = post(f"ENTER THE RESPONSE ADDRESS", data=json.dumps({"uuid": params["uuid"], "output_path": output_path, "status":"Done!"}))
+    upload_model_file(output_path, params)
