@@ -18,6 +18,7 @@ def build_dataset(file_path:str):
     os.mkdir(f"{data_path}/wavs")
     shutil.move(file_path, f"{data_path}/wavs/temp.zip")
     unzip_audioFile(f"{data_path}/wavs/temp.zip")
+    os.remove(f"{data_path}/wavs/temp.zip")
     for file in os.listdir(f"./resources/"):
         shutil.copy(f"./resources/{file}", f"{data_path}/{file}")
     # Resample (NEED!)
